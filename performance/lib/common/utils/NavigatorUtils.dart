@@ -2,6 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:performance/page/ChooseSysPage.dart';
+import 'package:performance/page/LoginPage.dart';
+import 'package:performance/page/home/HomePage.dart';
 
 ///
 ///導航欄
@@ -26,23 +29,27 @@ class NavigatorUtils {
     Navigator.pushAndRemoveUntil(context, new CupertinoPageRoute(builder: (context) => widget), null);
   }
   ///登入頁
-  // static goLogin(BuildContext context, {isAutoLogin}) {
-  //   if (isAutoLogin != null  && isAutoLogin != false) {
-  //     NavigatorRouter(context, LoginPage(isAutoLogin: isAutoLogin));
-  //   }
-  //   else {
-  //     Navigator.pushReplacementNamed(context, LoginPage.sName);
-  //   }
-  // }
+  static goLogin(BuildContext context, {isAutoLogin}) {
+    if (isAutoLogin != null  && isAutoLogin != false) {
+      NavigatorRouter(context, LoginPage(isAutoLogin: isAutoLogin));
+    }
+    else {
+      Navigator.pushReplacementNamed(context, LoginPage.sName);
+    }
+  }
   ///跳回登入頁
-  // static goTopLogin(BuildContext context) {
-  //   NavigatorRemoveRouter(context, LoginPage());
-  // }
+  static goTopLogin(BuildContext context) {
+    NavigatorRemoveRouter(context, LoginPage());
+  }
+  ///選擇系統頁面
+  static goChooseSys(BuildContext context) {
+    Navigator.pushReplacementNamed(context, ChooseSysPage.sName);
+  }
   ///首頁
   ///pushReplacementNamed需要由main.dart做導航
-  // static goHome(BuildContext context) {
-  //   Navigator.pushReplacementNamed(context, HomePage.sName);
-  // }
+  static goHome(BuildContext context) {
+    Navigator.pushReplacementNamed(context, HomePage.sName);
+  }
   
   
 }

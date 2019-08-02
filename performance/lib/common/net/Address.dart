@@ -5,16 +5,15 @@ import 'package:performance/common/utils/AesUtils.dart';
 class Address {
   static const String ssoDomain = "http://nsso.dctv.net.tw:8081/";
   static const String aesDomain = "http://asg.dctv.net.tw:8082/EncEDI/interfaceAES?data=";
-  static const String ssoDomainName = "http://wos.dctv.net.tw:8081/";
-  static const String kCMHostPath = "http://msg.dctv.net.tw/api/Q2/?";
-  static const String kDHostPath = "http://msg.dctv.net.tw/api/OnDuty/?";
-  static const String kAreaHostPath = "http://msg.dctv.net.tw/api/AreaBugData?";
-  static const String kSNRHostName = "http://snr.dctv.tw:25888/";
   static const String kSNRHostPingName = "http://snr.dctv.tw:8989/";
+  static const String wosDomainName = "http://wos.dctv.net.tw:8081/";
+  // static const String labediDomainName = "http://labedi.dctv.net.tw:9090/"; //測試機
+  static const String labediDomainName = "http://edi.dctv.net.tw:8082/";
+  static const String urlOSDTask = "DCTVNotification/OSDAPIJson?";
   static const String getSsoKey = "SSO/json/login.do?";
   static const String getVersion = "ValidataVersion/json/index!checkVersion.action?";
   static const String loginAPI = "WorkOrder/json/wok!login.action?";
-  static final String bundleID = "com.dctv.caseManager";
+  static final String bundleID = "com.dc.booking";
   static final String verNo = "3.0.0715";
 
 
@@ -31,7 +30,7 @@ class Address {
     } on PlatformException {
       
     }
-    return "$ssoDomainName/${getVersion}packageName=$bundleID&type=$deviceType&verNo=$verNo";
+    return "$wosDomainName/${getVersion}packageName=$bundleID&type=$deviceType&verNo=$verNo";
   }
 
   ///登入SSO
@@ -47,221 +46,166 @@ class Address {
     } on PlatformException {
       
     }
-    return "$ssoDomain${getSsoKey}function=login&accNo=$account&passWord=$password&uniqueCode=12343234&sysName=caseManager&tokenType=$deviceType&tokenID=$tokenId&packageName=com.dctv.caseManager&type=$deviceType";
+    return "$ssoDomain${getSsoKey}function=login&accNo=$account&passWord=$password&uniqueCode=12343234&sysName=booking&tokenType=$deviceType&tokenID=$tokenId&packageName=com.dc.booking&type=$deviceType";
   }
-  ///-------------------- caseManager api -------------------- ///
-  ///登入取得使用者資訊
-  static loginWithCmAccount(account, ssokey) {
-    return "${kCMHostPath}FunctionName=Login2&SYSName=caseManager&Account=$account&SSOKey=$ssokey";
+  ///-------------------- performance: WorkExpress api -------------------- ///
+  ///登入業績api
+  static performanceLogin(serviceURL, account, ssoKey) {
+    return "$serviceURL?accNo=$account&ssoKey=$ssoKey&sysName=booking";
   }
-
-  ///取得當班主管
-  static getDataOfShiftLeader() {
-    return "${kDHostPath}FunctionName=GetData";
-  }
-
-  ///立案
-  static createCaseWithAccount(area, address, qData, accNo) {
-    return "${kAreaHostPath}FunctionName=CreateCase&Area=$area&Address=$address&Qdata=$qData&Accno=$accNo";
-  }
-  ///讀取case
-  static readerCase(id, accNo, name) {
-    return "${kAreaHostPath}FunctionName=Reader&ID=$id&AccNo=$accNo&Name=$name";
-  }
-  ///關閉case
-  static setCloseCase(id, reason, accNo, name) {
-    return "${kAreaHostPath}FunctionName=SetClose&ID=$id&Reason=$reason&AccNo=$accNo&Name=$name";
-  }
-  ///回報case
-  static setReportCase(id, backData, accNo, name) {
-    return "${kAreaHostPath}FunctionName=BackData&ID=$id&BackData=$backData&Accno=$accNo&Name=$name";
-  }
-  ///取得關閉case資料
-  static getEventsCloseCaseWithArea(area) {
-    return "${kAreaHostPath}FunctionName=CloseCase&Area=$area";
-  }
-  ///取得open case資料
-  static getEventsOpenCase() {
-   return "${kAreaHostPath}FunctionName=OpenCase";
-  }
-
-  ///指派單位 or 條件查詢 by uniqueCode
-  static didAssignDepList(userId, uniqueCode) {
-    var urlStr = "${kCMHostPath}FunctionName=AssignDeptList&UserID=$userId";
-    if (uniqueCode != null && uniqueCode != "") {
-      urlStr += "&uniqueCode=$uniqueCode";
-    }
-    return urlStr;
-  }
-  ///取得部門編號, or 條件查詢 by id
-  static didDeptSelect(userId) {
-    var urlStr = "${kCMHostPath}FunctionName=DeptSelect";
-    if (userId != null && userId != "") {
-      urlStr += "&UserID=$userId";
-    }
-    return urlStr;
-  }
-  ///取得使用者部門編號
-  static didUserDeptSelect(userId) {
-    return "${kCMHostPath}FunctionName=userdeptselect&UserID=$userId";
-  }
-  ///取得部門內員工list
-  static didEmplSelect(deptId) {
-    return "${kCMHostPath}FunctionName=EmplSelect&DeptID=$deptId";
-  }
-  ///指派case給部門
-  static didAssignDeptCase(userId, caseId) {
-    return "${kCMHostPath}FunctionName=AssignDeptCase&UserID=$userId&CaseID=$caseId";
-  }
-  ///指派部門, params: userId, caseId, funit, newAData
-  static didAssignDept(userId, caseId, funit, newAData, pUserId) {
-    return "${kCMHostPath}FunctionName=AssignDept&UserID=$userId&CaseID=$caseId&FUnit=$funit&PUserID=$pUserId&NewAData=$newAData";
-  }
-  ///指派部門 params: userId, caseId, funit, puserId, newAData
-  static didAssignDeptExt(userId, caseId, funit, puserId, newAData) {
-    return "${kCMHostPath}FunctionName=AssignDept&UserID=$userId&CaseID=$caseId&FUnit=$funit&NewAData=$newAData&PuserID=$puserId";
-  }
-  ///取得指派部門員工案件列表
-  static didAssignEmplList(userId, deptId) {
-    return "${kCMHostPath}FunctionName=AssignEmplList&UserID=$userId&DeptID=$deptId";
-  }
-  ///指派case給員工詳情
-  static didAssignEmplCase(userId, caseId) {
-    return "${kCMHostPath}FunctionName=AssignEmplCase&UserID=$userId&CaseID=$caseId";
-  }
-  ///指派員工作業
-  static didAssignEmpl(userId, caseId, pUser) {
-    return "${kCMHostPath}FunctionName=AssignEmpl&UserID=$userId&CaseID=$caseId&PUser=$pUser";
-  }
-  ///取得個人案件處理清單
-  static didMaintList(userId, deptId) {
-    return "${kCMHostPath}FunctionName=MaintList&UserID=$userId&DeptID=$deptId";
-  }
-  ///取得業務list
-  static getSalesMaintList(userId, deptId, searchStatus) {
-    var str = "${kCMHostPath}FunctionName=SalesList&UserID=$userId&DeptID=$deptId";
-    if (searchStatus != null && searchStatus != '') {
-      str += "&$searchStatus";
-    }
-    return str;
-  }
-  ///取得個人案件處理清單，條件查詢
-  static didGetMaintListExt(itype, userId, deptId, searchStatus, searchCaseType, searchSubject, searchCustNo, searchSerial) {
-    var urlStr = "${kCMHostPath}FunctionName=MaintList&UserID=$userId&DeptID=$deptId";
-    if (itype == 1) {
-      if (searchStatus != null && searchStatus.length > 0) {
-        urlStr += "&SearchStatus=$searchStatus";
-      }
-      if (searchCaseType != null && searchCaseType.length > 0) {
-        urlStr += "&SearchCaseType=$searchCaseType";
-      }
-      if (searchSubject != null && searchSubject.length > 0) {
-        urlStr += "&SearchSubject=$searchSubject";
-      }
-      if (searchCustNo != null && searchCustNo.length > 0) {
-        urlStr += "&SearchCustNO=$searchCustNo";
-      }
-      if (searchSerial != null && searchSerial.length > 0) {
-        urlStr += "&SearchSerial=$searchSerial";
-      }
-    }
-    return urlStr;
-  }
-  ///取得個人案件詳情
-  static getMaintCase(userId, caseId) {
-    return "${kCMHostPath}FunctionName=MaintCase&UserID=$userId&CaseID=$caseId";
-  }
-  ///送出個人案件狀態
-  static didMaint(userId, caseId, newStatus, newAData) {
-    var str = "${kCMHostPath}FunctionName=Maint&UserID=$userId&CaseID=$caseId&newStatus=$newStatus&newAData=$newAData";
-    return str;
-  }
-  ///部門關閉caselist
-  static getDeptCloseList(userId, deptId) {
-    return "${kCMHostPath}FunctionName=DeptCloseList&UserID=$userId&DeptID=$deptId";
-  }
-  ///部門case詳情資料
-  static getDeptCaseDetail(userId, caseId) {
-    var str = "${kCMHostPath}FunctionName=DPMaintCase&UserID=$userId&CaseID=$caseId";
-    return str;
-  }
-  ///部門關閉case多筆
-  static didDeptClose(userId, caseId) {
-    var str = "${kCMHostPath}FunctionName=DeptClose&UserID=$userId&CaseID=$caseId";
-    return str;
-  }
-  ///file list
-  static getFileList(userId) {
-    return "${kCMHostPath}FunctionName=FileList&UserID=$userId";
-  }
-  ///file case
-  static getFileCase(userId, caseId) {
-    return "${kCMHostPath}FunctionName=FileCase&UserID=$userId&CaseID=$caseId";
-  }
-  ///案件歸檔執行
-  static didFile(userId, caseId) {
-    var str = "${kCMHostPath}FunctionName=File&UserID=$userId&CaseID=$caseId";
-    return str;
-  }
-  ///取得可選case狀態
-  static getCaseType() {
-    return "${kCMHostPath}FunctionName=CaseTypeSelect";
-  }
-  ///單位條件查詢case
-  static didGetDPMaintList(iType, userId, searchFunit, searchStatus, searchCaseType, searchSubject, searchCustNo, searchSerial, searchPuser,) {
-    var urlStr = "${kCMHostPath}FunctionName=DPMaintList&UserID=$userId&SearchFUnit=$searchFunit";
-    if (iType == 1) {
-      if (searchStatus != null && searchStatus.length > 0) {
-        urlStr += "&SearchStatus=$searchStatus";
-      }
-      if (searchCaseType != null && searchCaseType.length > 0) {
-        urlStr += "&SearchCaseType=$searchCaseType";
-      }
-      if (searchSubject != null && searchSubject.length > 0) {
-        urlStr += "&SearchSubject=$searchSubject";
-      }
-      if (searchCustNo != null && searchCustNo.length > 0) {
-        urlStr += "&SearchCustNO=$searchCustNo";
-      }
-      if (searchSerial != null && searchSerial.length > 0) {
-        urlStr += "&SearchSerial=$searchSerial";
-      }
-      if (searchPuser != null && searchPuser.length > 0) {
-        urlStr += "&SearchPuser=$searchPuser";
-      }
-    }
-    return urlStr;
-  }
-  ///業務ok
-  static toSalesOk(userId, caseId, toSales) {
-    return "${kCMHostPath}FunctionName=ToSalesOk&UserID=$userId&CaseID=$caseId&ToSales=$toSales";
-  }
-  ///單位部門回覆
-  static assignDPMaint(userId, caseId, pdeptId, puserId, newStatus, newAData) {
-    var str = "${kCMHostPath}FunctionName=DPMaint&UserID=$userId&CaseID=$caseId&PDeptID=$pdeptId&PUserID=$puserId&NewStatus=$newStatus&NewAData=$newAData";
-    return str;
-  }
-  ///取得使用者案件筆數
-  static getUserCaseType(account) {
-    return "${kCMHostPath}FunctionName=GetUserCaseCount&account=$account";
-  }
-  ///部門結案詳情
-  static getDeptCloseCase(userId, caseId) {
-    return "${kCMHostPath}FunctionName=DeptCloseCase&UserID=$userId&CaseID=$caseId";
-  }
-  ///取得案件部門統計分析列表
-  static getAnalizeCaseList(searchYear, searchMonth) {
-    return "${kCMHostPath}FunctionName=GetDeptCaseCount&SearchYear=$searchYear&SearchMonth=$searchMonth";
-  }
-
-
-  ///-------------------- snr api -------------------- ///
-  ///取得snr設定檔
-  static getQueryConfigureAPI() {
-    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QueryConfigure");
-    var appendUrl = aesDomain + aesUri;
+  
+  ///取得縣市選項
+  static getCityCodeList(accNo, isValiData) {
+    // var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QuerySignalLog&CustCD=$custId");
+    // var appendUrl = aesDomain + aesUri;
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!getCityCodeList.action?accNo=$accNo&isValiData=$isValiData";
     return appendUrl;
   }
+
+  ///取得區域選項
+  static getAreaCodeList(accNo, cityCode, isValiData) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!getAreaCodeList.action?accNo=$accNo&isValiData=$isValiData&cityCode=$cityCode";
+    return appendUrl;
+  }
+
+  ///首頁第一頁裝機能量資料
+  static getBookingReportList(accNo, wkDate, areaCode) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!bookReport.action?accNo=$accNo&wkDate=$wkDate";
+    if (areaCode != null && areaCode != "") {
+      appendUrl += "&areaCode=$areaCode";
+    }
+    return appendUrl;
+  }
+
+  ///取得統計分析
+  static getStatisticalAnalysis(accNo, wkDate, cityCode, areaCode) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!getStatisticalAnalysis.action?accNo=$accNo&dataDate=$wkDate";
+    if (cityCode != null && cityCode != "") {
+      appendUrl += "&cityCode=$cityCode";
+    }
+    if (areaCode != null && areaCode != "") {
+      appendUrl += "&areaCode=$areaCode";
+    }
+    return appendUrl;
+  }
+
+  ///取得區域分析
+  static getPermissionsArea(accNo, wkDate, cityCode ) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!getPermissionsArea.action?accNo=$accNo&dataDate=$wkDate&cityCode=$cityCode";
+    return appendUrl;
+  }
+
+  ///取得總工分析表
+  static getWorkOrderAnalysis(accNo, wkDate, areaCode) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!workOrderAnalysisNew.action?accNo=$accNo&wkDate=$wkDate&areaCode=$areaCode";
+    return appendUrl;
+  }
+
+  ///取得停機狀態
+  static getM_StopCategory(accNo, wkDate) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!mStopCategory.action?accNo=$accNo&dataDate=$wkDate";
+    return appendUrl;
+  }
+
+  ///取得繳費復機
+  static getRestoreMM(accNo, wkDate) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!restoreMM.action?accNo=$accNo&dataDate=$wkDate";
+    return appendUrl;
+  }
+
+  ///取得回收資料
+  static geyRecyclingAnalysisList(accNo, wkDate, areaCode) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!recyclingAnalysisList.action?accNo=$accNo&dataDate=$wkDate&areaCode=$areaCode";
+    return appendUrl;
+  }
+
+  ///取得戶籍戶數
+  static geyCensusInfoAPI(accNo, wkDate) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!censusInfo.action?accNo=$accNo&dataDate=$wkDate";
+    return appendUrl;
+  }
+
+  ///取得戶籍戶數分析
+  static getCensusInfoAnalysis(accNo, wkDate) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!censusInfoAnalysis.action?accNo=$accNo&dataDate=$wkDate";
+    return appendUrl;
+  }
+
+  ///取得業績分析
+  static getWkempAnalysis(accNo, wkDate, areaCode) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!wkempAnalysis.action?accNo=$accNo&dataDate=$wkDate&areaCode=$areaCode";
+    return appendUrl;
+  }
+
+  ///取得通路業績
+  static getChannelWKEMPAPI(accNo, wkDate, areaCode) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!getChannelWKEMP.action?accNo=$accNo&dataDate=$wkDate&areaCode=$areaCode";
+    return appendUrl;
+  }
+
+  ///取得通路區域
+  static getAreaWKEMP(accNo, wkDate, lineNo, channDeptCD, deptCode) {
+
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!getAreaWKEMP.action?accNo=$accNo&dataDate=$wkDate&lineNo=$lineNo&channDeptCD=$channDeptCD&deptCode=$deptCode";
+    return appendUrl;
+
+  }
+
+  ///取得通路部門個人
+  static getDeptWKEMP(accNo, wkDate, areaCode, deptCode) {
+    var appendUrl = "${wosDomainName}WorkExpress/json/interface!getDeptWKEMP.action?accNo=$accNo&dataDate=$wkDate&areaCode=$areaCode&deptCode=$deptCode";
+    return appendUrl;
+  }
+
+  ///走馬燈申請, post body
+  static postInsertOSDTask() {
+    var appendUrl = "$labediDomainName$urlOSDTask";
+    return appendUrl;
+  }
+
+  ///取得走馬燈列表，post body
+  static getOSDTaskList() {
+    var appendUrl = "$labediDomainName$urlOSDTask";
+    return appendUrl;
+  }
+
+  ///取得走馬燈最大字數，post body
+  static getMaxMessageLength() {
+    var appendUrl = "$labediDomainName$urlOSDTask";
+    return appendUrl;
+  }
+
+
+
+  ///-------------------- publicWork: WorkReply api -------------------- ///
+  ///取得派工部門列表
+  static getOutDeptDailyList(dataDate, areaCode) {
+    var appendUrl = "${wosDomainName}WorkReply/json/workInterface!outDeptDailyList.action?dataDate=$dataDate&areaCode=$areaCode";
+    return appendUrl;
+  }
+
+  ///取得裝機未完工
+  static getDtvReplyUnFinished(accNo, wkDate, areaCode, typeCode) {
+    var appendUrl = "${wosDomainName}WorkReply/json/workInterface!bookingReplyUnFinished.action?accNo=$accNo&dataDate=$wkDate&areaCode=$areaCode&typeCode=$typeCode";
+    return appendUrl;
+  }
+
+  ///取得維修完工
+  static getServiceReply(accNo, wkDate, areaCode, isOpen, typeCode) {
+    var appendUrl = "${wosDomainName}WorkReply/json/workInterface!repairReplyDataView.action?accNo=$accNo&dataDate=$wkDate&areaCode=$areaCode&isOpen=$isOpen&typeCode=$typeCode";
+    return appendUrl;
+  }
+
+  ///取得裝機完工
+  static getDtvReplyFinished(accNo, wkDate, areaCode, typeCode) {
+    var appendUrl = "${wosDomainName}WorkReply/json/workInterface!bookingReplyFinished.action?accNo=$accNo&dataDate=$wkDate&areaCode=$areaCode&typeCode=$typeCode";
+    return appendUrl;
+  }
+
+
+
+
+  ///-------------------- snr: snr api -------------------- ///
   ///小ping資料
   static getPingSNR(str) {
     String paraType = "";
@@ -291,72 +235,4 @@ class Address {
     var appendUrl = aesDomain + aesUri;
     return appendUrl;
   }
-  ///大ping-cpe
-  static getCPEDataAPI(cmts, cmmac) {
-    var aesUri = AesUtils.aes128Encrypt("${kSNRHostPingName}SNRping.php?Action=getCPE&CMTS=$cmts&CMMAC=$cmmac");
-    var appendUrl = aesDomain + aesUri;
-    return appendUrl;
-  }
-  ///大ping-flap
-  static getFLAPDataAPI(cmts, cmmac) {
-    var aesUri = AesUtils.aes128Encrypt("${kSNRHostPingName}SNRping.php?Action=getFLAP&CMTS=$cmts&CMMAC=$cmmac");
-    var appendUrl = aesDomain + aesUri;
-    return appendUrl;
-  }
-  ///大ping-清除flap
-  static clearFLAPDataAPI(cmts, cmmac) {
-    var aesUri = AesUtils.aes128Encrypt("${kSNRHostPingName}SNRping.php?Action=ClearFLAP&CMTS=$cmts&CMMAC=$cmmac");
-    var appendUrl = aesDomain + aesUri;
-    return appendUrl;
-  }
-  ///操作維修紀錄
-  static getHipassLogDataAPI(custNo) {
-    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=query_hilowpass_log&custNo=$custNo");
-    var appendUrl = aesDomain + aesUri;
-    return appendUrl;
-  }
-  ///清除維修記錄
-  static delReportLog(senderId, senderName, logIdList, custId, from) {
-    var logidStr = "";
-    var i = 0;
-    for (var str in logIdList) {
-      if (str.contains("XXXXX")) {
-        if (logidStr != "") {
-          if (i < 1) {
-            logidStr += ",XXXXX";
-          }
-        }
-        else {
-          if (i < 1) {
-            logidStr += "XXXXX";
-          }
-        }
-        i += 1;
-      }
-      else {
-        if (logidStr == "") {
-          logidStr = str;
-        }
-        else {
-          logidStr = "$logidStr,$str";
-        }
-      }
-    }
-    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=DeleteReportLog&SenderID=$senderId&SenderName=$senderName&LogID=$logidStr&CustCD=$custId&From=$from");
-    var appendUrl = aesDomain + aesUri;
-    return appendUrl;
-  }
-  ///操作維修紀錄-添加log
-  static addDescriptionAPI(custId, inputText, senderId, senderName, from) {
-    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=AddReportLog&SenderID=$senderId&SenderName=$senderName&InputText=$inputText&CustCD=$custId&From=$from");
-    var appendUrl = aesDomain + aesUri;
-    return appendUrl;
-  }
-  ///信號log
-  static getSignalLog(custId) {
-    var aesUri = AesUtils.aes128Encrypt("${kSNRHostName}SNRProcess?FunctionName=QuerySignalLog&CustCD=$custId");
-    var appendUrl = aesDomain + aesUri;
-    return appendUrl;
-  }
-
 }
