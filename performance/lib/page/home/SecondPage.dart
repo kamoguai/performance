@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:performance/widget/MyListState.dart';
 ///
 ///首頁第二頁-主管頁
@@ -15,6 +16,7 @@ class _SecondPageState extends State<SecondPage> with AutomaticKeepAliveClientMi
   void initState() {
     super.initState();
     clearData();
+    Fluttertoast.showToast(msg: "第二頁");
     // initParam();
 }
 

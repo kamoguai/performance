@@ -105,12 +105,12 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
               CupertinoActionSheetAction(
                 onPressed: () {
                   setState(() {
-                    strCity = '';
+                    strCity = '新北全區';
                     showRefreshLoading();
                   });
                   Navigator.pop(context);
                 },
-                child: Text('全部', style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
+                child: Text('新北全區', style: TextStyle(fontSize: ScreenUtil().setSp(20.0))),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {

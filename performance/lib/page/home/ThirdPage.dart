@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:performance/widget/MyListState.dart';
 ///
 ///首頁第三頁-分析頁
@@ -15,6 +16,7 @@ class _ThirdPageState extends State<ThirdPage> with AutomaticKeepAliveClientMixi
   void initState() {
     super.initState();
     clearData();
+    Fluttertoast.showToast(msg: "第三頁");
     // initParam();
 }
 

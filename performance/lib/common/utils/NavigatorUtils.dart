@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:performance/page/ChooseSysPage.dart';
 import 'package:performance/page/LoginPage.dart';
 import 'package:performance/page/home/HomePage.dart';
+import 'package:performance/page/marquee/ManualPage.dart';
 
 ///
 ///導航欄
@@ -46,10 +47,14 @@ class NavigatorUtils {
     Navigator.pushReplacementNamed(context, ChooseSysPage.sName);
   }
   ///首頁
-  ///pushReplacementNamed需要由main.dart做導航
   static goHome(BuildContext context) {
-    Navigator.pushReplacementNamed(context, HomePage.sName);
+    NavigatorRouter(context, HomePage());
   }
+  ///走馬燈操作說明頁面
+  static goManual(BuildContext context) {
+    NavigatorRouter(context, ManualPage());
+  }
+
   
   
 }

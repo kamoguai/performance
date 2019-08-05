@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:performance/widget/MyCalendarWidget.dart';
 import 'package:performance/widget/MyListState.dart';
 
@@ -17,6 +18,7 @@ class _FirstPageState extends State<FirstPage> with AutomaticKeepAliveClientMixi
   void initState() {
     super.initState();
     clearData();
+    Fluttertoast.showToast(msg: "第一頁");
     // initParam();
 }
 

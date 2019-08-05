@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:table_calendar/table_calendar.dart';
 ///
 ///日期選擇widget
@@ -33,7 +34,7 @@ class _MyCalendarWidgetState extends State<MyCalendarWidget> with TickerProvider
   void _onDaySelected(DateTime day, List events) {
     setState(() {
       _selectedDay = day;
-      
+      Fluttertoast.showToast(msg: "$_selectedDay");
     });
   }
 
@@ -53,28 +54,36 @@ class _MyCalendarWidgetState extends State<MyCalendarWidget> with TickerProvider
       ///起始日，可選週一或週日
       startingDayOfWeek: StartingDayOfWeek.monday,
       ///操作行為
-      availableGestures: AvailableGestures.all,
+      availableGestures: AvailableGestures.none,
       ///日曆格式
       availableCalendarFormats: const {
         CalendarFormat.month: 'Month',
-        // CalendarFormat.twoWeeks: '2 weeks',
+        CalendarFormat.twoWeeks: '2 weeks',
         // CalendarFormat.week: 'Week',
       },
       ///日曆style
       calendarStyle: CalendarStyle(
         ///所選定日期顏色
-        selectedColor: Colors.deepOrange[400],
+        selectedColor:  Colors.blue[200],
         ///今天顏色
-        todayColor: Colors.blue[200],
+        todayColor:Colors.deepOrange[400],
         ///註記顏色
         markersColor: Colors.brown[700],
       ),
-      ///右上方可選週期按鈕style
+      ///上方顯示日期及可選週期按鈕style
       headerStyle: HeaderStyle(
-        titleTextStyle: TextStyle(fontSize: 12),
+        ///顯示日期的style，這裡設定字型大小
+        titleTextStyle: TextStyle(fontSize: 16),
+        ///左邊箭頭padding，設定1為最小
+        leftChevronPadding: EdgeInsets.all(1),
+        ///右邊箭頭padding，設定1為最小
+        rightChevronPadding: EdgeInsets.all(1),
+        ///日期置中
         centerHeaderTitle: true,
-        formatButtonVisible: false
+        ///週期按鈕不顯示
+        // formatButtonVisible: false
       ),
+      ///日曆間隔
       rowHeight: 30,
       ///選定日期
       onDaySelected: _onDaySelected,
@@ -86,18 +95,7 @@ class _MyCalendarWidgetState extends State<MyCalendarWidget> with TickerProvider
   @override
   Widget build(BuildContext context) {
     return Container(
-      // margin: const EdgeInsets.all(20),
       child: _buildTableCalendar(),
     );
-    // return Container(
-    //   child: SingleChildScrollView(
-    //     scrollDirection: Axis.vertical,
-    //     child: Column(
-    //       children: <Widget>[
-    //         _buildTableCalendar()
-    //       ],
-    //     )
-    //   ),
-    // );
   }
 }

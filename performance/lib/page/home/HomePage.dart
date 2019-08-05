@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:performance/common/style/MyStyle.dart';
+import 'package:performance/common/utils/NavigatorUtils.dart';
 import 'package:performance/page/home/FirstPage.dart';
 import 'package:performance/page/home/SecondPage.dart';
 import 'package:performance/page/home/ThirdPage.dart';
@@ -36,20 +37,21 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
           case 0:
             setState(() {
               this.nowPage = 0;
+              print("第一頁");
             });
-            Fluttertoast.showToast(msg: "第一頁");
+            
             break;
           case 1:
             setState(() {
               this.nowPage = 1;
+              print("第二頁");
             });
-            Fluttertoast.showToast(msg: "第二頁");
             break;
           case 2:
             setState(() {              
               this.nowPage = 2;
+              print("第三頁");
             });
-            Fluttertoast.showToast(msg: "第三頁");
             break;
           default:
             break;
@@ -60,28 +62,106 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
       // initParam();
     }
 
-    @override
-    void dispose() {
-      super.dispose();
-      clearData();
+  @override
+  void dispose() {
+    super.dispose();
+    clearData();
+  }
+
+  @override
+  bool get isRefreshFirst => false;
+
+  @override
+  requestRefresh() async {
+    return null;
+  }
+
+  @override
+  requestLoadMore() async {
+    return null;
+  }
+
+  ///Scaffold appbar actions
+  List<Widget> actions() {
+    ///裝載action內容
+    List<Widget> action = [];
+    ///裝載row children內容
+    List<Widget> list = [];
+    list.add(
+      InkWell(
+        onTap: () {
+          this.showCityAlertSheetController(context);
+        },
+        child: Ink(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: autoTextSize(this.strCity == "" ? "新北全區":this.strCity, TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+        ),
+      ),
+    );
+    switch (this.nowPage) {
+      case 0:
+        list.add(
+          InkWell(
+            onTap: () {
+              NavigatorUtils.goManual(context);
+            },
+            child: Ink(
+              child: autoTextSize('走馬燈', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+            ),
+            
+          ),
+        );
+        list.add(
+          InkWell(
+            onTap: (){},
+            child: Ink(
+              child: autoTextSize('戶籍', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+            ),
+          ),
+        );
+        list.add(
+          InkWell(
+            onTap: (){},
+            child: Ink(
+              child: autoTextSize('回收', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+            ),              
+          ),
+        );
+        break;
+      default:
+        list.add(
+          Expanded(
+            child: Container(),
+          )
+        );
+        list.add(
+          InkWell(
+            onTap: (){},
+            child: Ink(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: autoTextSize('競業', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+            ),
+          ),
+        );
+        break;
     }
+    action = [
+      Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          children: list
+        ),
+      ),
+    ];
+    return action;
+  }
 
-    @override
-    bool get isRefreshFirst => false;
-
-    @override
-    requestRefresh() async {
-      return null;
-    }
-
-    @override
-    requestLoadMore() async {
-      return null;
-    }
-
+  ///Scaffold body顯示
   Widget bodyView() {
       Widget body;
       body = Container(
+        ///pageView實現左右換頁
         child: PageView(
           controller: pgController,
           children: pageWigetList.map((index) => buildPageItem(pageWigetList.indexOf(index))).toList(),
@@ -108,37 +188,55 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
         },
       ),
     );
-    if (this.nowPage == 0) {
-      list.add(
-        GestureDetector(
-          child: Container(
-            padding: EdgeInsets.all(5.0),
-            alignment: Alignment.center,
-            height: 42,
-            width: deviceWidth6(),
-            child: autoTextSize('業績', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+    switch (this.nowPage) {
+      case 0:
+        list.add(
+          GestureDetector(
+            child: Container(
+              padding: EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              height: 42,
+              width: deviceWidth6(),
+              child: autoTextSize('業績', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+            ),
+            onTap: () {
+              showRefreshLoading();
+            },
           ),
-          onTap: () {
-            showRefreshLoading();
-          },
-        ),
-      );
-    }
-    else {
-      list.add(
-        GestureDetector(
-          child: Container(
-            padding: EdgeInsets.all(5.0),
-            alignment: Alignment.center,
-            height: 42,
-            width: deviceWidth6(),
-            child: autoTextSize('', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+        );
+        break;
+      case 1:
+        list.add(
+          GestureDetector(
+            child: Container(
+              padding: EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              height: 42,
+              width: deviceWidth6(),
+              child: autoTextSize('', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+            ),
+            onTap: () {
+              
+            },
           ),
-          onTap: () {
-            
-          },
-        ),
-      );
+        );
+        break;
+      case 2:
+        list.add(
+          GestureDetector(
+            child: Container(
+              padding: EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              height: 42,
+              width: deviceWidth6(),
+              child: autoTextSize('分析', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+            ),
+            onTap: () {
+              
+            },
+          ),
+        );
+        break;
     }
     
     list.add(
@@ -176,7 +274,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
           padding: EdgeInsets.all(5.0),
           alignment: Alignment.center,
           height: 42,
-          width: deviceWidth6(),
+          width: deviceWidth7(),
           child: autoTextSize('返回', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
         ),
         onTap: () {
@@ -206,6 +304,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0.0,
+          leading: Container(),
+          actions: actions(),
         ),
         body: bodyView(),
         bottomNavigationBar: bottomBar(),
