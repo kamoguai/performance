@@ -1,3 +1,4 @@
+import 'package:performance/common/model/MarqueeTableCell.dart';
 import 'package:performance/common/model/UserInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:performance/common/redux/UserInfoRedux.dart';
@@ -14,7 +15,7 @@ class SysState {
   ThemeData themeData;
 
   ///個人案件列表
-  // List<MaintTableCell> maintList = new List();
+  List<MarqueeTableCell> marqueeList = new List();
 
   ///構造方法
   SysState({this.userInfo, this.themeData});

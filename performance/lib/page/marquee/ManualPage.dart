@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:performance/common/style/MyStyle.dart';
+import 'package:performance/common/utils/NavigatorUtils.dart';
 import 'package:performance/widget/BaseWidget.dart';
 
 ///
@@ -36,12 +37,8 @@ class ManualPage extends StatelessWidget with BaseWidget {
 
   ///Scaffold body widget
   Widget bodyView(context) {
-    Widget body = Card(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10.0),
-      
-      // padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-      // decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.grey, width: 1.0, style: BorderStyle.solid)),
-      child: SingleChildScrollView(
+    List<Widget> list = [
+      SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -108,7 +105,28 @@ class ManualPage extends StatelessWidget with BaseWidget {
             ),            
           ],
         ),
+      ),
+    ];
+
+    list.add(
+      Container(
+        padding: EdgeInsets.symmetric(vertical: 5.0),
+        child: OutlineButton(
+          onPressed: (){
+            NavigatorUtils.goMarqeeList(context);
+          },
+          color: Colors.grey,
+          child: autoTextSize('開始使用', TextStyle(color: Colors.black, fontSize: MyScreen.defaultTableCellFontSize(context)), context),
+        ),
       )
+    );
+
+    Widget body = Container(
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: list
+      ),
+      
     );
     return body;
   }
@@ -149,11 +167,14 @@ class ManualPage extends StatelessWidget with BaseWidget {
     return SafeArea(
       top: false,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          elevation: 0.0,
-          leading: Container(),
-          actions: actions(context),
+        appBar: PreferredSize(
+          child: AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            elevation: 0.0,
+            leading: Container(),
+            actions: actions(context),
+          ),
+          preferredSize: Size.fromHeight(40.0),
         ),
         body: bodyView(context),
         bottomNavigationBar: bottomBar(context),

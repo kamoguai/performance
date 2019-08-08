@@ -29,6 +29,7 @@ mixin MyListState<T extends StatefulWidget> on State<T>, AutomaticKeepAliveClien
   final MyPullLoadWidgetControl pullLoadWidgetControl = new MyPullLoadWidgetControl();
 
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey2 = new GlobalKey<RefreshIndicatorState>();
   ///轉圈圈loading
   showProgressLoading() {
     return new Center(child: new CircularProgressIndicator());

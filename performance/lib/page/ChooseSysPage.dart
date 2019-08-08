@@ -153,11 +153,14 @@ class _ChooseSysPageState extends State<ChooseSysPage> with BaseWidget {
     return SafeArea(
       top: false,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          leading: Container(),
-          elevation: 0.0,
-          actions: actions(),
+        appBar: PreferredSize(
+          child: AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            leading: Container(),
+            elevation: 0.0,
+            actions: actions(),
+          ),
+          preferredSize: Size.fromHeight(40.0),
         ),
         body: bodyView(),
         bottomNavigationBar: bottomBar()

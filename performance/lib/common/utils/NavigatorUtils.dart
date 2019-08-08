@@ -6,6 +6,7 @@ import 'package:performance/page/ChooseSysPage.dart';
 import 'package:performance/page/LoginPage.dart';
 import 'package:performance/page/home/HomePage.dart';
 import 'package:performance/page/marquee/ManualPage.dart';
+import 'package:performance/page/marquee/MarqueeListPage.dart';
 
 ///
 ///導航欄
@@ -53,6 +54,11 @@ class NavigatorUtils {
   ///走馬燈操作說明頁面
   static goManual(BuildContext context) {
     NavigatorRouter(context, ManualPage());
+  }
+
+  ///走馬燈列表頁面
+  static goMarqeeList(BuildContext context) {
+    NavigatorRouter(context, MarqueeListPage());
   }
 
   

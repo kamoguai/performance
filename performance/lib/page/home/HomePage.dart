@@ -88,43 +88,52 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
     ///裝載row children內容
     List<Widget> list = [];
     list.add(
-      InkWell(
-        onTap: () {
-          this.showCityAlertSheetController(context);
-        },
-        child: Ink(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: autoTextSize(this.strCity == "" ? "新北全區":this.strCity, TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+      Flexible(
+        flex: 2,
+        child: InkWell(
+          onTap: () {
+            this.showCityAlertSheetController(context);
+          },
+          child: Ink(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: autoTextSize(this.strCity == "" ? "新北全區":this.strCity, TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+          ),
         ),
-      ),
+      )
     );
     switch (this.nowPage) {
       case 0:
         list.add(
-          InkWell(
-            onTap: () {
-              NavigatorUtils.goManual(context);
-            },
-            child: Ink(
-              child: autoTextSize('走馬燈', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
-            ),
-            
-          ),
-        );
-        list.add(
-          InkWell(
-            onTap: (){},
-            child: Ink(
-              child: autoTextSize('戶籍', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+          Flexible(
+            child: InkWell(
+              onTap: () {
+                NavigatorUtils.goManual(context);
+              },
+              child: Ink(
+                child: autoTextSize('走馬燈', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+              ),
+              
             ),
           ),
         );
         list.add(
-          InkWell(
-            onTap: (){},
-            child: Ink(
-              child: autoTextSize('回收', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
-            ),              
+          Flexible(
+            child: InkWell(
+              onTap: (){},
+              child: Ink(
+                child: autoTextSize('戶籍', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+              ),
+            ),
+          ),
+        );
+        list.add(
+          Flexible(
+            child: InkWell(
+              onTap: (){},
+              child: Ink(
+                child: autoTextSize('回收', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+              ),              
+            ),
           ),
         );
         break;
@@ -135,11 +144,13 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
           )
         );
         list.add(
-          InkWell(
-            onTap: (){},
-            child: Ink(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: autoTextSize('競業', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+          Flexible(
+            child: InkWell(
+              onTap: (){},
+              child: Ink(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: autoTextSize('競業', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+              ),
             ),
           ),
         );
@@ -148,8 +159,6 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
     action = [
       Expanded(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
           children: list
         ),
       ),
@@ -175,111 +184,112 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
     List<Widget> list = [];
     
     list.add(
-      GestureDetector(
-        child: Container(
-          padding: EdgeInsets.all(5.0),
-          alignment: Alignment.center,
-          height: 42,
-          width: deviceWidth6(),
-          child: autoTextSize('刷新', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+      Flexible(
+        child: GestureDetector(
+          child: Container(
+            alignment: Alignment.center,
+            height: 42,
+            child: autoTextSize('刷新', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+          ),
+          onTap: () {
+            showRefreshLoading();
+          },
         ),
-        onTap: () {
-          showRefreshLoading();
-        },
       ),
     );
     switch (this.nowPage) {
       case 0:
         list.add(
-          GestureDetector(
-            child: Container(
-              padding: EdgeInsets.all(5.0),
-              alignment: Alignment.center,
-              height: 42,
-              width: deviceWidth6(),
-              child: autoTextSize('業績', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+          Flexible(
+            child: GestureDetector(
+              child: Container(
+                alignment: Alignment.center,
+                height: 42,
+                child: autoTextSize('業績', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+              ),
+              onTap: () {
+                showRefreshLoading();
+              },
             ),
-            onTap: () {
-              showRefreshLoading();
-            },
           ),
         );
         break;
       case 1:
         list.add(
-          GestureDetector(
-            child: Container(
-              padding: EdgeInsets.all(5.0),
-              alignment: Alignment.center,
-              height: 42,
-              width: deviceWidth6(),
-              child: autoTextSize('', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+          Flexible(
+            child: GestureDetector(
+              child: Container(
+                alignment: Alignment.center,
+                height: 42,
+                child: autoTextSize('', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+              ),
+              onTap: () {
+                
+              },
             ),
-            onTap: () {
-              
-            },
           ),
         );
         break;
       case 2:
         list.add(
-          GestureDetector(
-            child: Container(
-              padding: EdgeInsets.all(5.0),
-              alignment: Alignment.center,
-              height: 42,
-              width: deviceWidth6(),
-              child: autoTextSize('分析', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+          Flexible(
+            child: GestureDetector(
+              child: Container(
+                alignment: Alignment.center,
+                height: 42,
+                child: autoTextSize('分析', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+              ),
+              onTap: () {
+                
+              },
             ),
-            onTap: () {
-              
-            },
           ),
         );
         break;
     }
-    
     list.add(
-    Container(
-        alignment: Alignment.center,
-        height: 30,
-        // width: deviceWidth3(context),
-        child: FlatButton.icon(
-          icon: Image.asset('static/images/24.png'),
-          color: Colors.transparent,
-          label: Text(''),
-          onPressed: (){
-            // NavigatorUtils.goLogin(context);
+      Flexible(
+        flex: 3,
+        child: Container(
+          alignment: Alignment.center,
+          height: 30,
+          child: FlatButton.icon(
+            icon: Image.asset('static/images/24.png'),
+            color: Colors.transparent,
+            label: Text(''),
+            onPressed: (){
+              // NavigatorUtils.goLogin(context);
+            },
+          ),
+        ),
+      ),
+    );
+    list.add(
+      Flexible(
+        child: GestureDetector(
+          child: Container(
+            alignment: Alignment.center,
+            height: 42,
+            child: autoTextSize('今日', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+          ),
+          onTap: () {
+            
           },
         ),
       ),
     );
     list.add(
-      GestureDetector(
-        child: Container(
-          padding: EdgeInsets.all(5.0),
-          alignment: Alignment.center,
-          height: 42,
-          width: deviceWidth6(),
-          child: autoTextSize('今日', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+      Flexible(
+        child: GestureDetector(
+          child: Container(
+            alignment: Alignment.center,
+            height: 42,
+            child: autoTextSize('返回', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
+          ),
+          onTap: () {
+            Navigator.of(context).pop();
+          },
         ),
-        onTap: () {
-          
-        },
-      ),
-    );
-    list.add(
-      GestureDetector(
-        child: Container(
-          padding: EdgeInsets.all(5.0),
-          alignment: Alignment.center,
-          height: 42,
-          width: deviceWidth7(),
-          child: autoTextSize('返回', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context))),
-        ),
-        onTap: () {
-          Navigator.of(context).pop();
-        },
       ),
     );
     Widget bottom = Material(
@@ -301,11 +311,14 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
     return SafeArea(
       top: false,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          elevation: 0.0,
-          leading: Container(),
-          actions: actions(),
+        appBar: PreferredSize(
+          child: AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            elevation: 0.0,
+            leading: Container(),
+            actions: actions(),
+          ),
+          preferredSize: Size.fromHeight(40.0),
         ),
         body: bodyView(),
         bottomNavigationBar: bottomBar(),
