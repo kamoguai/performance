@@ -37,6 +37,8 @@ class _MarqueeListPageState extends State<MarqueeListPage> with AutomaticKeepAli
   ///原始資料
   final List<dynamic> originInDateArr = [];
   final List<dynamic> originOutDateArr = [];
+  ///上表title
+  var dataSectionArray = ["未審核","已審核","下架(可編輯)"];
   ///userInfo model
   UserInfo userInfo;
   ///緩存最大字數
@@ -132,6 +134,12 @@ class _MarqueeListPageState extends State<MarqueeListPage> with AutomaticKeepAli
       this.dataArray.addAll(res.data);
     }
     if (this.dataArray.length > 0) {
+      ///用dataArray作排序，a前b後為正向，b前a後為逆向
+      this.dataArray.sort((a,b) {
+        var eda = a["EndDate"] as String;
+        var edb = b["EndDate"] as String;
+        return edb.compareTo(eda);
+      });
       List<MarqueeTableCell> list = new List();
       var outDataArr = [];
       for (var dic in this.dataArray) {
@@ -150,6 +158,7 @@ class _MarqueeListPageState extends State<MarqueeListPage> with AutomaticKeepAli
         }
         list.add(MarqueeTableCell.fromJson(dic));
       }
+      
       for (var dic in this.inDateTimeArray) {
         if (dic["AcceptStatus"] == "0") {
           this.acceptNotArray_in.add(dic);
@@ -168,6 +177,7 @@ class _MarqueeListPageState extends State<MarqueeListPage> with AutomaticKeepAli
         setState(() {
           isLoading = false;
           pullLoadWidgetControl.dataList.clear();
+          
           pullLoadWidgetControl.dataList.addAll(list);
           pullLoadWidgetControl.needLoadMore = false;
         });
@@ -262,7 +272,7 @@ class _MarqueeListPageState extends State<MarqueeListPage> with AutomaticKeepAli
       bgColors =  MyColors.hexFromStr('f5ffef');
     }
     return Container(
-      padding: EdgeInsets.all(4.0),
+      padding: EdgeInsets.only(top: 2.0, bottom: 2.0),
       decoration: BoxDecoration(color: Color(bgColors),border: Border(bottom: BorderSide(color: Colors.black, width: 1.0, style: BorderStyle.solid))),
       child: Row(
         children: <Widget>[
@@ -297,13 +307,22 @@ class _MarqueeListPageState extends State<MarqueeListPage> with AutomaticKeepAli
       color: Colors.white,
       child: Column(
         children: <Widget>[
-          _renderHeader(0),
-          Expanded(
+          Flexible(
+            flex: 1,
+            child: _renderHeader(0),
+          ),
+          
+          Flexible(
+            flex: 5,
             child: _renderBody(),
           ),
-          _renderHeader(1),
-          Expanded(
-            // child: Container(color: Colors.yellow,),
+          Flexible(
+            flex: 1,
+            child: _renderHeader(1),
+          ),
+          
+          Flexible(
+            flex: 5 ,
             child: _renderBody2(),
           )
         ],

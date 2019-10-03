@@ -15,14 +15,22 @@ class MarqueeListItem extends StatelessWidget with BaseWidget{
 
   @override
   Widget build(BuildContext context) {
-    final dft = new DateFormat('yyyy-MM-dd HH:mm');
+    final dft = new DateFormat('yy-MM-dd HH:mm');
     var sDate = dft.parse(model.startDate);
     var eDate = dft.parse(model.endDate);
     var sd = dft.format(sDate);
     var ed = dft.format(eDate);
+    final deviceHeight = MediaQuery.of(context).size.height;
+    var rowHeight;
+    if (deviceHeight < 600) {
+      rowHeight = 25.0;
+    }
+    else {
+      rowHeight = null;
+    }
     return Container(
       height: 80,
-      padding: EdgeInsets.all(4.0),
+      // padding: EdgeInsets.all(4.0),
       child: Column(
         children: <Widget>[
           Flexible(
@@ -32,12 +40,14 @@ class MarqueeListItem extends StatelessWidget with BaseWidget{
               child: Row(
                 children: <Widget>[
                   Flexible(
+                    flex: 1,
                     child: Container(
                       alignment: Alignment.center,
                       child: autoTextSize('${model.areaName}', TextStyle(color: Colors.black), context),
                     ),
                   ),
                   Flexible(
+                    flex: 2,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
@@ -53,14 +63,17 @@ class MarqueeListItem extends StatelessWidget with BaseWidget{
                     ),
                   ),
                   Flexible(
+                    flex: 1,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Container(
+                          height: rowHeight,
                           alignment: Alignment.center,
                           child: autoTextSize('$sd', TextStyle(color: Colors.blue), context),
                         ),
                         Container(
+                          height: rowHeight,
                           alignment: Alignment.center,
                           child: autoTextSize('$ed', TextStyle(color: Colors.red), context),
                         ),
